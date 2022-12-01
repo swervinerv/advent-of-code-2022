@@ -10,4 +10,10 @@
     <ProjectReference Include="..\AdventOfCode.Services\AdventOfCode.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Year2022\Day01\input">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

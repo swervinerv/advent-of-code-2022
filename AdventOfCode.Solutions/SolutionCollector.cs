@@ -4,7 +4,10 @@ public static class SolutionCollector
 {
     public static IEnumerable<SolutionBase> FetchSolutions(int year, IEnumerable<int> days)
     {
-        if (days.Sum() == 0) days = Enumerable.Range(1, 25).ToArray();
+        if (days.Sum() == 0)
+        {
+            days = Enumerable.Range(1, 25).ToArray();
+        }
 
         foreach (int day in days)
         {
