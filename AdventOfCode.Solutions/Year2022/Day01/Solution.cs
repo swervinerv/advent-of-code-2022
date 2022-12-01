@@ -35,6 +35,33 @@ class Solution : SolutionBase
 
     protected override string SolvePartTwo()
     {
-        return "";
+        var inputList = Input.Split(
+            new string[] { "\n" },
+            StringSplitOptions.None
+        );
+
+
+        int elfId = 1;
+        int totalCaloriesPerElf = 0;
+
+        var caloriesByElf = new Dictionary<int, int>();
+
+        foreach (var entry in inputList)
+        {
+            if (string.IsNullOrWhiteSpace(entry))
+            {
+                caloriesByElf.Add(elfId++, totalCaloriesPerElf);
+
+                totalCaloriesPerElf = 0;
+
+                continue;
+            }
+
+            totalCaloriesPerElf += int.Parse(entry);
+        }
+
+        var totalCalories = caloriesByElf.OrderByDescending(_ => _.Value).Take(3).Sum(_ => _.Value);
+
+        return totalCalories.ToString();
     }
 }
