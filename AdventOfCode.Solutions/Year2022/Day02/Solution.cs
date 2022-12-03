@@ -43,6 +43,43 @@ class Solution : SolutionBase
 
     protected override string SolvePartTwo()
     {
-        return "";
+        //a, x = rock = 1
+        //b, y = paper = 2
+        //c, z = scissors = 3
+
+        var games = Input.SplitByNewline()
+            .Select(_ => _.Split(' '));
+
+        var totalPoints = 0;
+        foreach (var game in games)
+        {
+            var opponentPlayed = game[0].ToLower();
+            var outcome = game[1].ToLower();
+
+            if (outcome == "x")
+            {
+                totalPoints += opponentPlayed == "a"
+                    ? 3 : (opponentPlayed == "b" ? 1 : 2);
+
+                continue;
+            }
+
+            if (outcome == "y")
+            {
+                totalPoints += 3;
+
+                totalPoints += opponentPlayed == "a"
+                    ? 1 : (opponentPlayed == "b" ? 2 : 3);
+
+                continue;
+            }
+
+            totalPoints += 6;
+
+            totalPoints += opponentPlayed == "a"
+                ? 2 : (opponentPlayed == "b" ? 3 : 1);
+        }
+
+        return totalPoints.ToString();
     }
 }
