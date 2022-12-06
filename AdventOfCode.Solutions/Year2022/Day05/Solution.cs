@@ -90,6 +90,80 @@ class Solution : SolutionBase
 
     protected override string SolvePartTwo()
     {
-        return "";
+        var allInputs = Input.SplitByNewline();
+        var crates = allInputs.Take(8);
+
+        int crateStackCount = 9;
+
+        Dictionary<int, List<string>> stackedCrates = new();
+        for (var x = 1; x <= crateStackCount; x++)
+        {
+            stackedCrates[x] = new();
+        }
+
+        int previousColumnIndex = 0;
+        Dictionary<int, int> columnIndexes = new();
+        for (var x = 1; x <= crateStackCount; x++)
+        {
+            var columnIndex = previousColumnIndex == 0 ? 1 : previousColumnIndex + 4;
+
+            columnIndexes[columnIndex] = x;
+
+            previousColumnIndex = columnIndex;
+        }
+
+        foreach (var crate in crates)
+        {
+            for (var x = 0; x < crate.Length; x++)
+            {
+                var crateLetter = crate.Substring(x, 1);
+                if (char.IsLetter(crateLetter, 0))
+                {
+                    var column = columnIndexes[x];
+
+                    stackedCrates[column].Add(crateLetter);
+                }
+            }
+        }
+
+        for (var x = 1; x <= crateStackCount; x++)
+        {
+            stackedCrates[x].Reverse();
+        }
+
+        var remainingInputs = allInputs.Skip(9);
+        foreach (var instruction in remainingInputs)
+        {
+            var movement = ((string)instruction).Split(' ');
+
+            var moveCount = int.Parse(movement[1]);
+            var moveFrom = int.Parse(movement[3]);
+            var moveTo = int.Parse(movement[5]);
+
+            var crateCount = stackedCrates[moveFrom].Count;
+
+            List<string> cratesToMove = new();
+            for (var x = moveCount; x > 0; x--)
+            {
+                cratesToMove.Add(stackedCrates[moveFrom].ElementAt(crateCount - x));
+            }
+
+            stackedCrates[moveFrom].RemoveRange(crateCount - moveCount, moveCount);
+
+            foreach (var crate in cratesToMove.Where(_ => !string.IsNullOrWhiteSpace(_)))
+            {
+                stackedCrates[moveTo].Add(crate);
+            }
+        }
+
+        StringBuilder result = new();
+        foreach (var crate in stackedCrates)
+        {
+            var crateCount = crate.Value.Count;
+
+            result.Append(crate.Value.ElementAt(--crateCount));
+        }
+
+        return result.ToString();
     }
 }
